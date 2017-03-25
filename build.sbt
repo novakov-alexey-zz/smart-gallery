@@ -14,7 +14,8 @@ libraryDependencies ++= Seq(
   "com.sksamuel.elastic4s" %% "elastic4s-http" % "5.2.11",
   "com.sksamuel.elastic4s" %% "elastic4s-jackson" % "5.2.11",
   "com.clarifai.clarifai-api2" % "core" % "2.0.2",
-  "com.typesafe" %% "config" % "1.3.1",
+  "com.typesafe.akka" %% "akka-http" % "10.0.5",
+  "com.typesafe.akka" %% "akka-http-core" % "10.0.5",
   loggingScala,
   loggingLogback,
 

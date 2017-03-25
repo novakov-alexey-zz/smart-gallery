@@ -1,6 +1,7 @@
 package org.smartgallery
 
 import java.io.File
+import java.nio.file.Paths
 import java.util
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +15,9 @@ import com.typesafe.config.Config
 import com.typesafe.scalalogging.StrictLogging
 import okhttp3.{ConnectionPool, OkHttpClient}
 
-class ClarifyClient(config: Config) extends StrictLogging {
+class ClarifyService(config: Config) extends StrictLogging {
+  type PredictionCallback = String => Callback[util.List[ClarifaiOutput[Concept]]]
+
   private val clientId = config.getString("clarifai.clientId")
   private val clientSecret = config.getString("clarifai.clientSecret")
 
@@ -25,10 +28,11 @@ class ClarifyClient(config: Config) extends StrictLogging {
       .build())
     .buildSync()
 
-  def predictDir(path: String, callback: Callback[util.List[ClarifaiOutput[Concept]]], fileExt: String = "jpg"): Unit = {
-    val images = new File(path).list().filter(_.endsWith(fileExt)).take(20)
+  def predictDir(path: String, callback: PredictionCallback, fileExt: String = "jpg"): Unit = {
+    val images = new File(path).list().filter(_.endsWith(fileExt)).take(1)
     logger.debug(s"do prediction for ${images.length} images from $path, images: ${images.mkString(", ")}")
-    images.grouped(5).seq.foreach(_.par.foreach(img => predict(new File(path, img), callback)))
+    images.grouped(5).foreach(
+      _.par.foreach(fileName => predict(new File(path, fileName), callback(Paths.get(path, fileName).toString))))
   }
 
   def predict(img: File, callback: Callback[util.List[ClarifaiOutput[Concept]]]): Unit = {

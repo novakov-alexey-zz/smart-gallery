@@ -3,9 +3,9 @@ package org.smartgallery
 
 import com.sksamuel.elastic4s.http.{ElasticDsl, HttpClient}
 import com.sksamuel.elastic4s.jackson.ElasticJackson.Implicits._
-import com.sksamuel.elastic4s.{ElasticsearchClientUri, Hit, HitReader, IndexAndType}
+import com.sksamuel.elastic4s.{ElasticsearchClientUri, Hit, HitReader}
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy
-import org.smartgallery.MobilePhotoMapping._
+import org.smartgallery.EsPhotoMapping._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -32,15 +32,15 @@ object Elasticsearch extends ElasticDsl {
         .refresh(RefreshPolicy.IMMEDIATE)
     }
 
-  def searchFor(concept: String): Future[List[Either[Throwable, Photo]]] =
+  def searchFor(concept: String): Future[List[Photo]] =
     client.execute {
       search(indexAndType) query termQuery(conceptsList, concept)
-    } map (_.safeTo[Photo].toList)
+    } map (_.to[Photo].toList)
 }
 
 case class Photo(path: String, concepts: List[String])
 
-object MobilePhotoMapping {
+object EsPhotoMapping {
   val indexName = "photos"
   val `type` = "mobile"
   val filePath = "filePath"
