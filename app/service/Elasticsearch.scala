@@ -1,11 +1,11 @@
-package org.smartgallery
+package service
 
 
 import com.sksamuel.elastic4s.http.{ElasticDsl, HttpClient}
 import com.sksamuel.elastic4s.jackson.ElasticJackson.Implicits._
 import com.sksamuel.elastic4s.{ElasticsearchClientUri, Hit, HitReader}
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy
-import org.smartgallery.EsPhotoMapping._
+import service.EsPhotoMapping._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

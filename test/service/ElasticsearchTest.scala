@@ -1,4 +1,4 @@
-package org.smartgallery
+package service
 
 import com.sksamuel.elastic4s.http.ElasticDsl
 import org.scalatest.{AsyncFlatSpec, Matchers}

@@ -1,10 +1,8 @@
-package org.smartgallery
-
+package service
 
 import java.io.IOException
 import java.util
 
-import akka.http.scaladsl.Http
 import clarifai2.api.request.ClarifaiRequest.Callback
 import clarifai2.dto.model.output.ClarifaiOutput
 import clarifai2.dto.prediction.Concept
@@ -14,13 +12,10 @@ import com.typesafe.scalalogging.StrictLogging
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
-object SmartGalleryApp extends App with StrictLogging with SearchApi {
-  val conf = ConfigFactory.load("application.conf")
+object DirPrediction extends StrictLogging {
+  private val conf = ConfigFactory.load("application.conf")
   val clarifai = new ClarifyService(conf)
-
-  Http().bindAndHandle(searchRoute, interface = "localhost", port = conf.getInt("gallery.http-port"))
-
-  clarifai.predictDir("/Users/alexey/Dropbox/Camera Uploads/Frankfurt2015", onClarifaiResponse)
+  //clarifai.predictDir("/Users/alexey/Dropbox/Camera Uploads/Frankfurt2015", onClarifaiResponse)
 
   def onClarifaiResponse: String => Callback[util.List[ClarifaiOutput[Concept]]] = {
     fullPath: String => {
