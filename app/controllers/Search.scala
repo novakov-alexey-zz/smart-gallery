@@ -13,7 +13,7 @@ class Search @Inject() (components: ControllerComponents) extends AbstractContro
 
   def query(query: String) = Action.async {
     val photos = Elasticsearch.searchFor(query)
-    val paths = photos.map(_.map(_.path).mkString(", "))
-    paths.map(p => Ok(views.html.search(s"Photos: $p")))
+    val paths = photos.map(_.map(_.path))
+    paths.map(p => Ok(views.html.search(s"Found ${p.length} images", p)))
   }
 }

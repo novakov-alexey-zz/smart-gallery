@@ -12,10 +12,10 @@ import com.typesafe.scalalogging.StrictLogging
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
 
-object DirPrediction extends StrictLogging {
+object DirPrediction extends App with StrictLogging {
   private val conf = ConfigFactory.load("application.conf")
   val clarifai = new ClarifyService(conf)
-  //clarifai.predictDir("/Users/alexey/Dropbox/Camera Uploads/Frankfurt2015", onClarifaiResponse)
+  clarifai.predictDir("/Users/alexey/Dropbox/Camera Uploads/Frankfurt2015", onClarifaiResponse)
 
   def onClarifaiResponse: String => Callback[util.List[ClarifaiOutput[Concept]]] = {
     fullPath: String => {

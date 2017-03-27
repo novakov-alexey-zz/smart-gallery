@@ -1,4 +1,4 @@
-@(message: String)
+@(message: String, paths: List[String])
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,7 +11,11 @@
         <form method="get" action="search">
             <label for="query">Search: </label><input type="text" name="query" id="query"/>
         </form>
-        @message
+        <b>@message</b><br><br>
+
+        @for(path <- paths) {
+            <img src="@routes.Assets.at("images/")@path.split("/").takeRight(1)" width="10%" height="10%">
+        }
     </body>
     <script type="application/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
 </html>

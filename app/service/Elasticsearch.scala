@@ -34,7 +34,7 @@ object Elasticsearch extends ElasticDsl {
 
   def searchFor(concept: String): Future[List[Photo]] =
     client.execute {
-      search(indexAndType) query termQuery(conceptsList, concept)
+      search(indexAndType) query matchQuery(conceptsList, concept)
     } map (_.to[Photo].toList)
 }
 
