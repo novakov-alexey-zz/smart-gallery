@@ -15,7 +15,7 @@ import scala.concurrent.duration._
 object DirPrediction extends App with StrictLogging {
   private val conf = ConfigFactory.load("application.conf")
   val clarifai = new ClarifyService(conf)
-  clarifai.predictDir("/public/images", onClarifaiResponse)
+  clarifai.predictDir("public/images", onClarifaiResponse)
 
   def onClarifaiResponse: String => Callback[util.List[ClarifaiOutput[Concept]]] = {
     fullPath: String => {
