@@ -29,10 +29,13 @@ class ClarifyService(config: Config) extends StrictLogging {
     .buildSync()
 
   def predictDir(path: String, callback: PredictionCallback, fileExt: String = "jpg"): Unit = {
-    val images = new File(path).list().filter(_.endsWith(fileExt))
-    logger.debug(s"do prediction for ${images.length} images from $path, images: ${images.mkString(", ")}")
-    images.grouped(5).foreach(
-      _.par.foreach(fileName => predict(new File(path, fileName), callback(Paths.get(path, fileName).toString))))
+    val filteredImgs = Option(new File(path).list()).getOrElse(Array()).filter(_.endsWith(fileExt))
+    logger.debug(s"do prediction for ${filteredImgs.length} images from $path, images: ${filteredImgs.mkString(", ")}")
+
+    filteredImgs.grouped(5).foreach(
+      _.par.foreach(fileName =>
+        predict(new File(path, fileName),
+          callback(Paths.get(path, fileName).toString))))
   }
 
   def predict(img: File, callback: Callback[util.List[ClarifaiOutput[Concept]]]): Unit = {
